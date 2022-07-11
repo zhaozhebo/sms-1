@@ -1,1 +1,7 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.199.61.188:3306/sms_message?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+    username: zhaozhebo
+    password: TrialData@123
 
