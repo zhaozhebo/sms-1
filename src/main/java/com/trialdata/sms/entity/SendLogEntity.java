@@ -29,9 +29,6 @@ public class SendLogEntity extends BaseEntity {
   @ApiModelProperty(value = "状态：0失败，1成功")
   private Integer status;
 
-  @ApiModelProperty(value = "备注")
-  private String remark;
-
   public void checkResponse(String response) {
     if (response.startsWith("FAIL@#@")) {
       String[] responseArray = response.split("@#@");

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @TableName("receive_log")
 public class ReceiveLogEntity extends BaseEntity {
 
-  private String platformName;
+  private String configName;
 
   private String mobile;
 
@@ -17,6 +17,4 @@ public class ReceiveLogEntity extends BaseEntity {
 
   // "状态：0失败，1成功"
   private int status = 1;
-
-  private String remark;
 }
