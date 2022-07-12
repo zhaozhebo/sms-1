@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class BaseEntity {
 
-  @TableId
-  private String id;
+  @TableId(type = IdType.AUTO)
+  private Long id;
 
   @TableField(fill = FieldFill.INSERT)
   private LocalDateTime createTime;

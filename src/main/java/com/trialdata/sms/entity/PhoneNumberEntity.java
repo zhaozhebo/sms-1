@@ -8,12 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@TableName("phone_list")
-public class PhoneListEntity extends BaseEntity {
+@TableName("phone_number")
+public class PhoneNumberEntity extends BaseEntity {
 
   private TYPE type;
   private String mobile;
-  private String remark;
 
   public enum TYPE {
     WHITE_LIST,
