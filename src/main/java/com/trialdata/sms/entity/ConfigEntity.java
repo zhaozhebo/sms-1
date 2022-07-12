@@ -1,6 +1,7 @@
 package com.trialdata.sms.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,21 +12,14 @@ public class ConfigEntity extends BaseEntity {
 
   private String name;
 
-  private String platform;
-
   private String domain;
 
   private String accessKeyId;
 
+  @JsonIgnore
   private String accessKeySecret;
 
-  private Integer isActive;
+  private Integer isActive = 1;
 
-  private Integer isEnable;
-
-  private String remark;
-
-  private Integer level;
-
-  private Integer channelType;
+  private Integer isEnable = 1;
 }
