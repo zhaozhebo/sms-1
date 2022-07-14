@@ -1,11 +1,11 @@
 package com.trialdata.sms.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.trialdata.sms.entity.SendLogEntity;
 import com.trialdata.sms.service.SendLogService;
 import com.trialdata.sms.tools.R;
 import io.swagger.annotations.Api;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,31 +23,18 @@ public class SendLogRestController {
 
   @GetMapping("/condition")
   public R getSendLog(
+      @RequestParam(required = false, defaultValue = "1") int page,
+      @RequestParam(required = false, defaultValue = "10") int size,
       @RequestParam(required = false) String configName,
       @RequestParam(required = false) String mobile) {
 
     log.info("查询发送日志: 手机号：{}", mobile);
 
-    final String regexp = "/^1[3456789]\\d{9}$/";
+    Page<SendLogEntity> pageParams = new Page<>(page < 1 ? 1 : page, size);
 
-    LambdaQueryWrapper<SendLogEntity> wrapper = new LambdaQueryWrapper<>();
+    IPage<SendLogEntity> result = sendLogService
+        .selectPage(pageParams, configName, mobile);
 
-    if (isNotNull(configName)) {
-      wrapper.eq(SendLogEntity::getConfigName, configName);
-    }
-    if (isNotNull(mobile)) {
-      if (regexp.matches(mobile)) {
-        wrapper.eq(SendLogEntity::getMobile, mobile);
-      } else {
-        return R.fail("手机号输入错误");
-      }
-    }
-    List<SendLogEntity> list = sendLogService.list(wrapper);
-
-    return R.success(list);
-  }
-
-  private boolean isNotNull(String value) {
-    return value != null && !value.trim().equals("") && !value.trim().equals("null");
+    return R.success(result);
   }
 }

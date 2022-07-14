@@ -1,11 +1,11 @@
 package com.trialdata.sms.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.trialdata.sms.entity.ReceiveLogEntity;
 import com.trialdata.sms.service.ReceiveLogService;
 import com.trialdata.sms.tools.R;
 import io.swagger.annotations.Api;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,23 +23,18 @@ public class ReceiveLogRestController {
 
   @GetMapping("/condition")
   public R getReceiveLog(
+      @RequestParam(required = false, defaultValue = "1") int page,
+      @RequestParam(required = false, defaultValue = "10") int size,
       @RequestParam(required = false) String mobile,
       @RequestParam(required = false) Integer status) {
 
     log.info("查询接收日志,手机号：{}，状态；{}", mobile, status);
 
-    LambdaQueryWrapper<ReceiveLogEntity> wrapper = new LambdaQueryWrapper<>();
-    if (isNotNull(mobile)) {
-      wrapper.eq(ReceiveLogEntity::getMobile, mobile);
-    }
-    if (status != null) {
-      wrapper.eq(ReceiveLogEntity::getStatus, status);
-    }
-    List<ReceiveLogEntity> list = receiveLogService.list(wrapper);
-    return R.success(list);
-  }
+    Page<ReceiveLogEntity> pageParams = new Page<>(page < 1 ? 1 : page, size);
 
-  private boolean isNotNull(String value) {
-    return value != null && !value.trim().equals("") && !value.trim().equals("null");
+    IPage<ReceiveLogEntity> result = receiveLogService
+        .selectPage(pageParams, mobile, status);
+
+    return R.success(result);
   }
 }
