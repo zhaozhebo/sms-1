@@ -1,7 +1,7 @@
 package com.trialdata.sms.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,7 +16,7 @@ public class ConfigEntity extends BaseEntity {
 
   private String accessKeyId;
 
-  @TableField(select = false)
+  @JsonIgnore
   private String accessKeySecret;
 
   private Integer isActive = 1;

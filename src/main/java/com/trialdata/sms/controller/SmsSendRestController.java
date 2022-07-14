@@ -5,13 +5,14 @@ import com.trialdata.sms.service.SmsSendService;
 import com.trialdata.sms.tools.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("sms")
-@Api(tags = "短信")
+@Api(tags = "短信发送管理")
 @Slf4j
 public class SmsSendRestController {
 
@@ -24,7 +25,7 @@ public class SmsSendRestController {
 
   @PostMapping("send")
   @ApiOperation("发送短信")
-  public R send(@RequestBody SmsParamsDto smsParamsDTO) {
+  public R send(@RequestBody @Valid SmsParamsDto smsParamsDTO) {
     log.info("发送短信 params:{}", smsParamsDTO);
     try {
       smsSendService.sendMessage(smsParamsDTO);

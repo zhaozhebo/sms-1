@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.trialdata.sms.dto.XiAoSmsMessageDto;
 import com.trialdata.sms.entity.ConfigEntity;
-import com.trialdata.sms.util.SpringUtils;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +30,7 @@ public class XiAoSmsService {
 
 
   protected String sendSms(
-      String mobile, Map<String, String> params) {
+      String mobile, String message) {
 
     ConfigEntity configEntity = configService.findByName("XiAo");
 
@@ -41,13 +39,16 @@ public class XiAoSmsService {
         .password(configEntity
             .getAccessKeySecret()).
             mobile(mobile)
-        .msg(params.get("msg"))
+        .msg(message)
         .build();
 
     String url = configEntity.getDomain() + jsonUrl;
 
-    ResponseEntity<Object> responseEntity = SpringUtils.getBean(RestTemplate.class)
+    RestTemplate restTemplate = new RestTemplate();
+
+    ResponseEntity<Object> responseEntity = restTemplate
         .postForEntity(url, xiAoSmsMessage, Object.class);
+
     HttpStatus statusCode = responseEntity.getStatusCode();
 
     if (HttpStatus.OK.equals(statusCode)) {

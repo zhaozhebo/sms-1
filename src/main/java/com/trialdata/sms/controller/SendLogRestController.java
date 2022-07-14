@@ -1,5 +1,6 @@
 package com.trialdata.sms.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.trialdata.sms.entity.SendLogEntity;
 import com.trialdata.sms.service.SendLogService;
 import com.trialdata.sms.tools.R;
@@ -21,20 +22,29 @@ public class SendLogRestController {
   }
 
   @GetMapping("/condition")
-  public R getSendLog(@RequestParam(required = false) String mobile) {
+  public R getSendLog(
+      @RequestParam(required = false) String configName,
+      @RequestParam(required = false) String mobile) {
 
     log.info("查询发送日志: 手机号：{}", mobile);
 
     final String regexp = "/^1[3456789]\\d{9}$/";
-    if (!isNotNull(mobile)) {
-      List<SendLogEntity> list = sendLogService.query().list();
-      return R.success(list);
+
+    LambdaQueryWrapper<SendLogEntity> wrapper = new LambdaQueryWrapper<>();
+
+    if (isNotNull(configName)) {
+      wrapper.eq(SendLogEntity::getConfigName, configName);
     }
-    if (regexp.matches(mobile)) {
-      List<SendLogEntity> list = sendLogService.query().eq("mobile", mobile).list();
-      return R.success(list);
+    if (isNotNull(mobile)) {
+      if (regexp.matches(mobile)) {
+        wrapper.eq(SendLogEntity::getMobile, mobile);
+      } else {
+        return R.fail("手机号输入错误");
+      }
     }
-    return R.fail("手机号输入错误");
+    List<SendLogEntity> list = sendLogService.list(wrapper);
+
+    return R.success(list);
   }
 
   private boolean isNotNull(String value) {

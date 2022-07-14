@@ -9,7 +9,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "接收发送请求日志管理")
+@Api(tags = "接收请求日志管理")
 @Slf4j
 @RequestMapping("receiveLog")
 @RestController
@@ -23,16 +23,12 @@ public class ReceiveLogRestController {
 
   @GetMapping("/condition")
   public R getReceiveLog(
-      @RequestParam(required = false) String configName,
       @RequestParam(required = false) String mobile,
       @RequestParam(required = false) Integer status) {
 
-    log.info("查询接收日志,供应商：{}，手机号：{}，状态；{}", configName, mobile, status);
+    log.info("查询接收日志,手机号：{}，状态；{}", mobile, status);
 
     LambdaQueryWrapper<ReceiveLogEntity> wrapper = new LambdaQueryWrapper<>();
-    if (isNotNull(configName)) {
-      wrapper.eq(ReceiveLogEntity::getConfigName, configName);
-    }
     if (isNotNull(mobile)) {
       wrapper.eq(ReceiveLogEntity::getMobile, mobile);
     }

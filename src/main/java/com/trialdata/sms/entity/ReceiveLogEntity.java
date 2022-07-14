@@ -9,8 +9,6 @@ import lombok.EqualsAndHashCode;
 @TableName("receive_log")
 public class ReceiveLogEntity extends BaseEntity {
 
-  private String configName;
-
   private String mobile;
 
   private String request;
